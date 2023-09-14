@@ -143,8 +143,9 @@ function getBook(id) {
     return data.find((d) => d.id === id);
 }
 
-const book = getBook(3);
+const book = getBook(1);
 book;
+/*
 
 const { title, author, pages, publicationDate, genres, hasMovieAdaptation } =
     book;
@@ -197,6 +198,8 @@ console.log(book.translations.spanish);
 const spanishTranslation = book.translations.spanish || "NOT TRANSLATED";
 spanishTranslation;
 
+*/
+
 function getTotalReviewCount(book) {
     const goodreads = book.reviews?.goodreads?.reviewsCount;
     const librarything = book.reviews?.librarything?.reviewsCount ?? 0;
@@ -211,4 +214,76 @@ function getTotalReviewCount(book) {
     const librarything = book.reviews?.librarything?.reviewsCount ?? 0;
     librarything;
     return goodreads + librarything;
+}
+
+const books = getBooks();
+books;
+
+// map
+const x = [1, 2, 3, 4, 5].map((el) => el * 2);
+console.log(x);
+
+const titles = books.map((book) => book.title);
+titles;
+
+const essentialData = books.map((book) => ({
+    title: book.title,
+    author: book.author,
+    reviewsCount: getTotalReviewCount(book),
+}));
+essentialData;
+
+// filter
+const longBooksWithMovie = books
+    .filter((book) => book.pages > 500)
+    .filter((book) => book.hasMovieAdaptation);
+longBooksWithMovie;
+
+const adventureBooks = books
+    .filter((books) => books.genres.includes("adventure"))
+    .map((book) => book.title);
+adventureBooks;
+
+// reduce
+const pagesAllBooks = books.reduce((sum, book) => sum + book.pages, 0);
+pagesAllBooks;
+
+// sort (modify the original) -> The slice method generate a copy
+const arr = [3, 7, 1, 9, 6];
+const sorted = arr.slice().sort((a, b) => a - b);
+sorted;
+arr;
+
+const sortedByPages = books.slice().sort((a, b) => a.pages - b.pages);
+sortedByPages;
+
+// Add
+const newBook = {
+    id: 6,
+    title: "HP 2",
+    author: "Rowling",
+};
+const booksAfterAdd = [...books, newBook];
+booksAfterAdd;
+
+// Delete
+const booksAfterDelete = booksAfterAdd.filter((book) => book.id !== 2);
+booksAfterDelete;
+
+// Update
+const booksAfterUpdate = booksAfterDelete.map((book) =>
+    book.id === 1 ? { ...book, pages: 1111 } : book
+);
+booksAfterUpdate;
+
+// fetch("https://jsonplaceholder.typicode.com/todos")
+//   .then((res) => res.json())
+//   .then((data) => console.log(data));
+
+async function getTodos() {
+    const res = await fetch("https://jsonplaceholder.typicode.com/todos");
+    const data = await res.json();
+    console.log(data);
+
+    // return data;
 }
